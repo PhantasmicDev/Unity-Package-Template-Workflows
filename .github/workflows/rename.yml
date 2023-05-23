@@ -1,0 +1,36 @@
+name: Rename Package
+
+on:
+  workflow_call:
+    inputs:
+      package-name:
+        type: string
+        required: true
+      company-name:
+        type: string
+        required: true
+      official-name:
+        type: string
+        required: false
+
+permissions:
+  contents: write
+
+jobs:
+  rename:
+    name: Rename
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Get full package name
+        id: package-name
+        run: |
+          NAME=$(echo ${{ inputs.official-name }} | '[:upper:]' '[:lower:]')
+
+          if [ -z "$NAME" ]; then
+            NAME=$(echo com.${{ inputs.company-name }}.${{ inputs.package-name }} | '[:upper:]' '[:lower:]')
+          fi
+
+          echo "name=$NAME" >> GITHUB_OUTPUT
