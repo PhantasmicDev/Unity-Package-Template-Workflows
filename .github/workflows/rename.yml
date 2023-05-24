@@ -31,6 +31,50 @@ jobs:
 
           if [ -z "$NAME" ]; then
             NAME=$(echo com.${{ inputs.company-name }}.${{ inputs.package-name }} | '[:upper:]' '[:lower:]')
+            echo "Official package name was not provided, $NAME will be used instead"
           fi
 
           echo "name=$NAME" >> GITHUB_OUTPUT
+
+      - name: Edit package name
+        uses: jossef/action-set-json-field@v2
+        with:
+          file: package.json
+          field: name
+          value: ${{ steps.package-name.outputs.name }}
+
+      - name: Edit package display name
+        uses: jossef/action-set-json-field@v2
+        with:
+          file: package.json
+          field: displayName
+          value: ${{ inputs.package-name }}
+
+
+
+      - name: Gather Assembly Definition paths
+        id: asmdef-paths
+        run: |
+          function find_asmdef() {
+            local TARGET_DIRECTORY="$1"
+
+            if ! [ -d "$TARGET_DIRECTORY" ]; then
+              echo ""
+              return
+            fi
+
+            echo find "$TARGET_DIRECTORY" -name "*.asmdef" -print -quit
+          }
+          
+          echo "runtime=$(find_asmdef "Runtime")" >> GITHUB_OUTPUT
+          echo "editor=$(find_asmdef "Editor")" >> GITHUB_OUTPUT
+          echo "runtime-tests=$(find_asmdef "Tests/Runtime")" >> GITHUB_OUTPUT
+          echo "editor-tests=$(find_asmdef "Tests/Editor")" >> GITHUB_OUTPUT
+
+      - name: Update Runtime assembly definition name
+        if: steps.asmdef-paths.outputs.asmdef != ''
+        uses: jossef/action-set-json-field@v2
+        with:
+          file: ${{ steps.asmdef-paths.outputs.runtime }}
+          field: name
+          value: "${{ inputs.company-name }}/${{ inputs.package-name }}"
