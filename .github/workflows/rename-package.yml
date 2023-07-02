@@ -30,11 +30,11 @@ jobs:
           NAME=$(echo "${{ inputs.official-name }}" | tr '[:upper:]' '[:lower:]')
 
           if [ -z "$NAME" ]; then
-            NAME=$(echo com.${{ inputs.company-name }}.${{ inputs.package-name }} | tr '[:upper:]' '[:lower:]')
-            echo "Official package name was not provided, $NAME will be used instead"
+            NAME=$(echo com.${{ inputs.company-name }}.${{ inputs.package-name }} | tr '[:upper:]' '[:lower:]' | sed 's/ //g')
+            echo "Official package name was not provided, '$NAME' will be used instead"
           fi
 
-          echo "name=$NAME" >> GITHUB_OUTPUT
+          echo "name=$NAME" >> "$GITHUB_OUTPUT"
 
       - name: Edit package name
         uses: jossef/action-set-json-field@v2
@@ -78,10 +78,10 @@ jobs:
           
           ASMDEF_BASE_NAME=${{ inputs.company-name }}.${{ inputs.package-name }}
 
-          echo "runtime=$(rename_asmdef_in_directory "Runtime" "$ASMDEF_BASE_NAME")" >> GITHUB_OUTPUT
-          echo "editor=$(rename_asmdef_in_directory "Editor" "$ASMDEF_BASE_NAME.Editor")" >> GITHUB_OUTPUT
-          echo "runtime-tests=$(rename_asmdef_in_directory "Tests/Runtime" "$ASMDEF_BASE_NAME.Tests")" >> GITHUB_OUTPUT
-          echo "editor-tests=$(rename_asmdef_in_directory "Tests/Editor" "$ASMDEF_BASE_NAME.Editor.Tests")" >> GITHUB_OUTPUT
+          echo "runtime=$(rename_asmdef_in_directory "Runtime" "$ASMDEF_BASE_NAME")" >> "$GITHUB_OUTPUT"
+          echo "editor=$(rename_asmdef_in_directory "Editor" "$ASMDEF_BASE_NAME.Editor")" >> "$GITHUB_OUTPUT"
+          echo "runtime-tests=$(rename_asmdef_in_directory "Tests/Runtime" "$ASMDEF_BASE_NAME.Tests")" >> "$GITHUB_OUTPUT"
+          echo "editor-tests=$(rename_asmdef_in_directory "Tests/Editor" "$ASMDEF_BASE_NAME.Editor.Tests")" >> "$GITHUB_OUTPUT"
 
       - name: Update Runtime assembly definition name
         if: steps.rename-asmdef.outputs.runtime != ''
