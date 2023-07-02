@@ -27,7 +27,7 @@ jobs:
       - name: Get full package name
         id: package-name
         run: |
-          NAME=$(echo ${{ inputs.official-name }} | '[:upper:]' '[:lower:]')
+          NAME=$(echo "${{ inputs.official-name }}" | tr '[:upper:]' '[:lower:]')
 
           if [ -z "$NAME" ]; then
             NAME=$(echo com.${{ inputs.company-name }}.${{ inputs.package-name }} | '[:upper:]' '[:lower:]')
