@@ -62,8 +62,7 @@ jobs:
             fi
             
             local CURRENT_PATH=$(find "$DIRECTORY" -maxdepth 1 -name "*.asmdef" -print -quit)
-            echo $CURRENT_PATH
-            if ! [ -d "$CURRENT_PATH" ]; then
+            if [ -z "$CURRENT_PATH" ]; then
               echo "Notice: Expected '.asmdef' files was not found in directory '$DIRECTORY'." >&2
               return
             fi
@@ -80,9 +79,9 @@ jobs:
           ASMDEF_BASE_NAME=$(echo "${{ inputs.company-name }}"."${{ inputs.package-name }}" | sed 's/ //g')
 
           echo "runtime=$(rename_asmdef_in_directory "Runtime" "$ASMDEF_BASE_NAME")" >> "$GITHUB_OUTPUT"
-          echo "editor=$(rename_asmdef_in_directory "Editor" "$ASMDEF_BASE_NAME.Editor")" >> "$GITHUB_OUTPUT"
-          echo "runtime-tests=$(rename_asmdef_in_directory "Tests/Runtime" "$ASMDEF_BASE_NAME.Tests")" >> "$GITHUB_OUTPUT"
-          echo "editor-tests=$(rename_asmdef_in_directory "Tests/Editor" "$ASMDEF_BASE_NAME.Editor.Tests")" >> "$GITHUB_OUTPUT"
+          echo "editor=$(rename_asmdef_in_directory "Editor" "$ASMDEF_BASE_NAME".Editor")" >> "$GITHUB_OUTPUT"
+          echo "runtime-tests=$(rename_asmdef_in_directory "Tests/Runtime" "$ASMDEF_BASE_NAME".Tests)" >> "$GITHUB_OUTPUT"
+          echo "editor-tests=$(rename_asmdef_in_directory "Tests/Editor" "$ASMDEF_BASE_NAME".Editor.Tests)" >> "$GITHUB_OUTPUT"
 
       - name: Update Runtime assembly definition name
         if: steps.rename-asmdef.outputs.runtime != ''
