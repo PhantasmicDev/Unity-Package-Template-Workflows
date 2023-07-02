@@ -31,7 +31,7 @@ jobs:
 
           if [ -z "$OFFICIAL_NAME" ]; then
             OFFICIAL_NAME=$(echo com."${{ inputs.company-name }}"."${{ inputs.package-name }}" | tr '[:upper:]' '[:lower:]' | sed 's/ //g')
-            echo "Official package name was not provided, '$NAME' will be used instead"
+            echo "Official package name was not provided, '$OFFICIAL_NAME' will be used instead"
           fi
 
           echo "official-name=$OFFICIAL_NAME" >> "$GITHUB_OUTPUT"
