@@ -68,7 +68,7 @@ jobs:
             fi
 
             local NEW_NAME="$2"
-            local NEW_PATH=$(dirname "$CURRENT_PATH")/$NEW_NAME
+            local NEW_PATH=$(dirname "$CURRENT_PATH")/"$NEW_NAME".asmdef
 
             mv $CURRENT_PATH $NEW_PATH
             echo "Renamed '$CURRENT_PATH' to '$NEW_PATH'." >&2
