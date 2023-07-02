@@ -89,6 +89,7 @@ jobs:
         with:
           file: ${{ steps.rename-asmdef.outputs.runtime }}
           field: name
+          # Going to need to gather this value prior because either input can contain a space and that's not allowed
           value: "${{ inputs.company-name }}.${{ inputs.package-name }}"
 
       - name: Update Editor assembly definition name
