@@ -77,7 +77,7 @@ jobs:
             echo $NEW_PATH
           }
           
-          ASMDEF_BASE_NAME=$(echo "${{ inputs.company-name }}"."${{ inputs.package-name }}" | sed 's/ //g')
+          ASMDEF_BASE_NAME=${{ steps.parse-inputs.outputs.asmdef-base-name }}
 
           echo "runtime=$(rename_asmdef_in_directory "Runtime" "$ASMDEF_BASE_NAME")" >> "$GITHUB_OUTPUT"
           echo "editor=$(rename_asmdef_in_directory "Editor" "$ASMDEF_BASE_NAME".Editor)" >> "$GITHUB_OUTPUT"
@@ -90,8 +90,7 @@ jobs:
         with:
           file: ${{ steps.rename-asmdef.outputs.runtime }}
           field: name
-          # Going to need to gather this value prior because either input can contain a space and that's not allowed
-          value: "${{ inputs.company-name }}.${{ inputs.package-name }}"
+          value: ${{ steps.parse-inputs.outputs.asmdef-base-name }}
 
       - name: Update Editor assembly definition name
         if: steps.rename-asmdef.outputs.editor != ''
@@ -99,7 +98,7 @@ jobs:
         with:
           file: ${{ steps.rename-asmdef.outputs.editor }}
           field: name
-          value: "${{ inputs.company-name }}.${{ inputs.package-name }}.Editor"
+          value: ${{ steps.parse-inputs.outputs.asmdef-base-name }}.Editor
 
       - name: Update Runtime Tests assembly definition name
         if: steps.rename-asmdef.outputs.runtime-tests != ''
@@ -107,7 +106,7 @@ jobs:
         with:
           file: ${{ steps.rename-asmdef.outputs.runtime-tests }}
           field: name
-          value: "${{ inputs.company-name }}.${{ inputs.package-name }}.Tests"
+          value: ${{ steps.parse-inputs.outputs.asmdef-base-name }}.Tests
 
       - name: Update Editor Tests assembly definition name
         if: steps.rename-asmdef.outputs.editor-tests != ''
@@ -115,4 +114,11 @@ jobs:
         with:
           file: ${{ steps.rename-asmdef.outputs.editor-tests }}
           field: name
-          value: "${{ inputs.company-name }}.${{ inputs.package-name }}.Editor.Tests"
+          value: ${{ steps.parse-inputs.outputs.asmdef-base-name }}.Editor.Tests
+
+      - name: Commit & Push
+        uses: EndBug/add-and-commit@v9
+        with:
+          message: Renamed Package to ${{ inputs.package-name }}
+          committer_name: GitHub Actions
+          committer_email: 41898282+github-actions[bot]@users.noreply.github.com
