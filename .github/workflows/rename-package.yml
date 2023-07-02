@@ -62,6 +62,7 @@ jobs:
             fi
             
             local CURRENT_PATH=$(find "$DIRECTORY" -maxdepth 1 -name "*.asmdef" -print -quit)
+            echo $CURRENT_PATH
             if ! [ -d "$CURRENT_PATH" ]; then
               echo "Notice: Expected '.asmdef' files was not found in directory '$DIRECTORY'." >&2
               return
