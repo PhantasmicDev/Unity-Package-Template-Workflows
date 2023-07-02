@@ -24,24 +24,25 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Get full package name
-        id: package-name
+      - name: Parse provided inputs
+        id: parse-inputs
         run: |
-          NAME=$(echo "${{ inputs.official-name }}" | tr '[:upper:]' '[:lower:]')
+          OFFICIAL_NAME=$(echo "${{ inputs.official-name }}" | tr '[:upper:]' '[:lower:]')
 
-          if [ -z "$NAME" ]; then
-            NAME=$(echo com."${{ inputs.company-name }}"."${{ inputs.package-name }}" | tr '[:upper:]' '[:lower:]' | sed 's/ //g')
+          if [ -z "$OFFICIAL_NAME" ]; then
+            OFFICIAL_NAME=$(echo com."${{ inputs.company-name }}"."${{ inputs.package-name }}" | tr '[:upper:]' '[:lower:]' | sed 's/ //g')
             echo "Official package name was not provided, '$NAME' will be used instead"
           fi
 
-          echo "name=$NAME" >> "$GITHUB_OUTPUT"
+          echo "official-name=$OFFICIAL_NAME" >> "$GITHUB_OUTPUT"
+          echo "asmdef-base-name=$(echo "${{ inputs.company-name }}"."${{ inputs.package-name }}" | sed 's/ //g')" >> "$GITHUB_OUTPUT"
 
       - name: Edit package name
         uses: jossef/action-set-json-field@v2
         with:
           file: package.json
           field: name
-          value: ${{ steps.package-name.outputs.name }}
+          value: ${{ steps.parse-inputs.outputs.official-name }}
 
       - name: Edit package display name
         uses: jossef/action-set-json-field@v2
