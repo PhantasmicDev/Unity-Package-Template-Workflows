@@ -30,7 +30,7 @@ jobs:
           NAME=$(echo "${{ inputs.official-name }}" | tr '[:upper:]' '[:lower:]')
 
           if [ -z "$NAME" ]; then
-            NAME=$(echo com.${{ inputs.company-name }}.${{ inputs.package-name }} | tr '[:upper:]' '[:lower:]' | sed 's/ //g')
+            NAME=$(echo com."${{ inputs.company-name }}"."${{ inputs.package-name }}" | tr '[:upper:]' '[:lower:]' | sed 's/ //g')
             echo "Official package name was not provided, '$NAME' will be used instead"
           fi
 
@@ -76,7 +76,7 @@ jobs:
             echo $NEW_PATH
           }
           
-          ASMDEF_BASE_NAME=${{ inputs.company-name }}.${{ inputs.package-name }}
+          ASMDEF_BASE_NAME=$(echo "${{ inputs.company-name }}"."${{ inputs.package-name }}" | sed 's/ //g')
 
           echo "runtime=$(rename_asmdef_in_directory "Runtime" "$ASMDEF_BASE_NAME")" >> "$GITHUB_OUTPUT"
           echo "editor=$(rename_asmdef_in_directory "Editor" "$ASMDEF_BASE_NAME.Editor")" >> "$GITHUB_OUTPUT"
