@@ -75,7 +75,7 @@ jobs:
             echo "Renamed '$CURRENT_PATH' to '$NEW_PATH'." >&2
             
             # Rename meta file if it exists
-            if [ ! -z "$CURRENT_PATH".meta ]; then
+            if [ -e "$CURRENT_PATH".meta ]; then
               mv "$CURRENT_PATH".meta "$NEW_PATH".meta
               echo "Renamed '$CURRENT_PATH.meta' to '$NEW_PATH.meta'.meta." >&2
             else
