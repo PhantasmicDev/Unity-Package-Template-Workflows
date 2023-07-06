@@ -79,7 +79,7 @@ jobs:
               mv "$CURRENT_PATH".meta "$NEW_PATH".meta
               echo "Renamed '$CURRENT_PATH.meta' to '$NEW_PATH.meta'.meta." >&2
             else
-              echo "No '.meta' file found for '$CURRENT_PATH' to rename"
+              echo "No '.meta' file found for '$CURRENT_PATH' to rename" >&2
             fi
             
             echo $NEW_PATH
