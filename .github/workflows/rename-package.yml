@@ -12,6 +12,9 @@ on:
       official-name:
         type: string
         required: false
+      root-namespace:
+        type: string
+        required: false
 
 permissions:
   contents: write
@@ -93,36 +96,68 @@ jobs:
           echo "editor-tests=$(rename_asmdef_in_directory "Tests/Editor" "$ASMDEF_BASE_NAME".Editor.Tests)" >> "$GITHUB_OUTPUT"
 
       - name: Update Runtime assembly definition name
-        if: steps.rename-asmdef.outputs.runtime != ''
+        if: ${{ steps.rename-asmdef.outputs.runtime != '' }}
         uses: jossef/action-set-json-field@v2
         with:
           file: ${{ steps.rename-asmdef.outputs.runtime }}
           field: name
           value: ${{ steps.parse-inputs.outputs.asmdef-base-name }}
+          
+      - name: Update Runtime assembly root namespace
+        if: ${{ steps.rename-asmdef.outputs.runtime != '' && inputs.root-namespace != '' }}
+        uses: jossef/action-set-json-field@v2
+        with:
+          file: ${{ steps.rename-asmdef.outputs.runtime }}
+          field: rootNamespace
+          value: ${{ inputs.root-namespace }}
 
       - name: Update Editor assembly definition name
-        if: steps.rename-asmdef.outputs.editor != ''
+        if: ${{ steps.rename-asmdef.outputs.editor != '' }}
         uses: jossef/action-set-json-field@v2
         with:
           file: ${{ steps.rename-asmdef.outputs.editor }}
           field: name
           value: ${{ steps.parse-inputs.outputs.asmdef-base-name }}.Editor
+          
+      - name: Update Editor assembly root namespace
+        if: ${{ steps.rename-asmdef.outputs.editor != '' && inputs.root-namespace != '' }}
+        uses: jossef/action-set-json-field@v2
+        with:
+          file: ${{ steps.rename-asmdef.outputs.editor }}
+          field: rootNamespace
+          value: ${{ inputs.root-namespace }}.Editor
 
       - name: Update Runtime Tests assembly definition name
-        if: steps.rename-asmdef.outputs.runtime-tests != ''
+        if: ${{ steps.rename-asmdef.outputs.runtime-tests != '' }}
         uses: jossef/action-set-json-field@v2
         with:
           file: ${{ steps.rename-asmdef.outputs.runtime-tests }}
           field: name
           value: ${{ steps.parse-inputs.outputs.asmdef-base-name }}.Tests
+          
+      - name: Update Runtime Tests assembly definition root namespace
+        if: ${{ steps.rename-asmdef.outputs.runtime-tests != '' && inputs.root-namespace != '' }}
+        uses: jossef/action-set-json-field@v2
+        with:
+          file: ${{ steps.rename-asmdef.outputs.runtime-tests }}
+          field: rootNamespace
+          value: ${{ inputs.root-namespace }}.Tests
 
       - name: Update Editor Tests assembly definition name
-        if: steps.rename-asmdef.outputs.editor-tests != ''
+        if: ${{ steps.rename-asmdef.outputs.editor-tests != '' }}
         uses: jossef/action-set-json-field@v2
         with:
           file: ${{ steps.rename-asmdef.outputs.editor-tests }}
           field: name
           value: ${{ steps.parse-inputs.outputs.asmdef-base-name }}.Editor.Tests
+          
+      - name: Update Editor Tests assembly definition root namespace
+        if: ${{ steps.rename-asmdef.outputs.editor-tests != '' && inputs.root-namespace != '' }}
+        uses: jossef/action-set-json-field@v2
+        with:
+          file: ${{ steps.rename-asmdef.outputs.editor-tests }}
+          field: rootNamespace
+          value: ${{ inputs.root-namespace }}.Editor.Tests
 
       - name: Commit & Push
         uses: EndBug/add-and-commit@v9
