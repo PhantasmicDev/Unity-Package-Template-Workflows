@@ -71,9 +71,17 @@ jobs:
             local NEW_NAME="$2"
             local NEW_PATH=$(dirname "$CURRENT_PATH")/"$NEW_NAME".asmdef
 
-            mv $CURRENT_PATH $NEW_PATH
+            mv "$CURRENT_PATH" "$NEW_PATH"
             echo "Renamed '$CURRENT_PATH' to '$NEW_PATH'." >&2
-
+            
+            # Rename meta file if it exists
+            if [ ! -z "$CURRENT_PATH".meta ]; then
+              mv "$CURRENT_PATH".meta "$NEW_PATH".meta
+              echo "Renamed '$CURRENT_PATH.meta' to '$NEW_PATH.meta'.meta." >&2
+            else
+              echo "No '.meta' file found for '$CURRENT_PATH' to rename"
+            fi
+            
             echo $NEW_PATH
           }
           
