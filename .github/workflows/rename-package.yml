@@ -41,14 +41,14 @@ jobs:
           echo "asmdef-base-name=$(echo "${{ inputs.company-name }}"."${{ inputs.package-name }}" | sed 's/ //g')" >> "$GITHUB_OUTPUT"
 
       - name: Edit package name
-        uses: jossef/action-set-json-field@v2
+        uses: jossef/action-set-json-field@v2.1
         with:
           file: package.json
           field: name
           value: ${{ steps.parse-inputs.outputs.official-name }}
 
       - name: Edit package display name
-        uses: jossef/action-set-json-field@v2
+        uses: jossef/action-set-json-field@v2.1
         with:
           file: package.json
           field: displayName
@@ -97,7 +97,7 @@ jobs:
 
       - name: Update Runtime assembly definition name
         if: ${{ steps.rename-asmdef.outputs.runtime != '' }}
-        uses: jossef/action-set-json-field@v2
+        uses: jossef/action-set-json-field@v2.1
         with:
           file: ${{ steps.rename-asmdef.outputs.runtime }}
           field: name
@@ -105,7 +105,7 @@ jobs:
           
       - name: Update Runtime assembly root namespace
         if: ${{ steps.rename-asmdef.outputs.runtime != '' && inputs.root-namespace != '' }}
-        uses: jossef/action-set-json-field@v2
+        uses: jossef/action-set-json-field@v2.1
         with:
           file: ${{ steps.rename-asmdef.outputs.runtime }}
           field: rootNamespace
@@ -113,7 +113,7 @@ jobs:
 
       - name: Update Editor assembly definition name
         if: ${{ steps.rename-asmdef.outputs.editor != '' }}
-        uses: jossef/action-set-json-field@v2
+        uses: jossef/action-set-json-field@v2.1
         with:
           file: ${{ steps.rename-asmdef.outputs.editor }}
           field: name
@@ -121,7 +121,7 @@ jobs:
           
       - name: Update Editor assembly root namespace
         if: ${{ steps.rename-asmdef.outputs.editor != '' && inputs.root-namespace != '' }}
-        uses: jossef/action-set-json-field@v2
+        uses: jossef/action-set-json-field@v2.1
         with:
           file: ${{ steps.rename-asmdef.outputs.editor }}
           field: rootNamespace
@@ -129,7 +129,7 @@ jobs:
 
       - name: Update Runtime Tests assembly definition name
         if: ${{ steps.rename-asmdef.outputs.runtime-tests != '' }}
-        uses: jossef/action-set-json-field@v2
+        uses: jossef/action-set-json-field@v2.1
         with:
           file: ${{ steps.rename-asmdef.outputs.runtime-tests }}
           field: name
@@ -137,7 +137,7 @@ jobs:
           
       - name: Update Runtime Tests assembly definition root namespace
         if: ${{ steps.rename-asmdef.outputs.runtime-tests != '' && inputs.root-namespace != '' }}
-        uses: jossef/action-set-json-field@v2
+        uses: jossef/action-set-json-field@v2.1
         with:
           file: ${{ steps.rename-asmdef.outputs.runtime-tests }}
           field: rootNamespace
@@ -145,7 +145,7 @@ jobs:
 
       - name: Update Editor Tests assembly definition name
         if: ${{ steps.rename-asmdef.outputs.editor-tests != '' }}
-        uses: jossef/action-set-json-field@v2
+        uses: jossef/action-set-json-field@v2.1
         with:
           file: ${{ steps.rename-asmdef.outputs.editor-tests }}
           field: name
@@ -153,7 +153,7 @@ jobs:
           
       - name: Update Editor Tests assembly definition root namespace
         if: ${{ steps.rename-asmdef.outputs.editor-tests != '' && inputs.root-namespace != '' }}
-        uses: jossef/action-set-json-field@v2
+        uses: jossef/action-set-json-field@v2.1
         with:
           file: ${{ steps.rename-asmdef.outputs.editor-tests }}
           field: rootNamespace
